@@ -65,3 +65,25 @@ body {
   color: #8c7266;
   font-weight: normal;
 }
+
+@media (max-width: 980px) {
+  body {
+    height: auto;
+  }
+
+  .page {
+    flex-direction: column;
+  }
+
+  .globe {
+    width: 100%;
+    height: 100vw;
+  }
+
+  .list {
+    width: 100%;
+    height: auto;
+
+    text-align: center;
+  }
+}
