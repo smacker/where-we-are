@@ -46,26 +46,12 @@
     }
   },
   {
-    "login": "zurk",
-    "name": "Konstantin Slavnov",
-    "location": null
-  },
-  {
     "login": "dennwc",
     "name": "Denys Smirnov",
     "location": {
       "name": "Tallinn, Estonia",
       "lat": 59.43696079999999,
       "long": 24.7535747
-    }
-  },
-  {
-    "login": "gustavmaskowitz",
-    "name": "Gustav Maskowitz",
-    "location": {
-      "name": "Oxford, UK",
-      "lat": 51.7520209,
-      "long": -1.2577263
     }
   },
   {
@@ -164,6 +150,15 @@
     }
   },
   {
+    "login": "agarciamontoro",
+    "name": "Alejandro García Montoro",
+    "location": {
+      "name": "Granada, Spain",
+      "lat": 37.1773363,
+      "long": -3.5985571
+    }
+  },
+  {
     "login": "kuba--",
     "name": "Kuba Podgórski",
     "location": null
@@ -234,7 +229,11 @@
   {
     "login": "lwsanty",
     "name": null,
-    "location": null
+    "location": {
+      "name": "Tallinn, Estonia",
+      "lat": 59.43696079999999,
+      "long": 24.7535747
+    }
   },
   {
     "login": "dmitryvinn",
@@ -293,15 +292,6 @@
     }
   },
   {
-    "login": "glimow",
-    "name": "Tristan Kalos",
-    "location": {
-      "name": "Berkeley, CA, USA",
-      "lat": 37.8718992,
-      "long": -122.2585399
-    }
-  },
-  {
     "login": "r0mainK",
     "name": "Romain Keramitas",
     "location": {
@@ -313,11 +303,6 @@
   {
     "login": "irinakhismatullina",
     "name": null,
-    "location": null
-  },
-  {
-    "login": "aliciakozlowski",
-    "name": "Alicia Kozlowski",
     "location": null
   },
   {
@@ -336,8 +321,8 @@
     "location": null
   },
   {
-    "login": "Nicholas-Nord",
-    "name": null,
+    "login": "GarryNewbiz",
+    "name": "Garry Sourced",
     "location": null
   }
 ]
