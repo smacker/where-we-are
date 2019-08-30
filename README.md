@@ -9,3 +9,8 @@ Deployed version: http://smacker.ru/where-we-are/
 ```
 python3 -m http.server
 ```
+
+### Credits
+
+- The Earth implementation heavily inspired by [Jerome Etienne](https://github.com/jeromeetienne/threex.planets/) and his [blog post](http://learningthreejs.com/blog/2013/09/16/how-to-make-the-earth-in-webgl/)
+- Idea and most of the implementation for the sun movement borrowed from [Andrey Sitnik](https://sitnik.ru/)
