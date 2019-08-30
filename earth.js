@@ -3,7 +3,6 @@
 // TODO: import from three.js + bundler
 // TODO: add loader while images are loading
 // TODO: images: optimize jpg and convert to webp
-// TODO: add resize handler
 // TODO: add touch events
 // TODO: add mobile support
 // TODO: better animation when user stops rotating
@@ -217,6 +216,16 @@ class Earth {
         document.addEventListener('mouseup', mouseUp, false);
         this.container.classList.add('is-grabbing');
       }
+    });
+
+    window.addEventListener('resize', () => {
+      this.renderer.setSize(
+        this.container.offsetWidth,
+        this.container.offsetHeight
+      );
+      this.camera.aspect =
+        this.container.offsetWidth / this.container.offsetHeight;
+      this.camera.updateProjectionMatrix();
     });
   }
 
