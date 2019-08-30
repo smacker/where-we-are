@@ -4,7 +4,11 @@ const list = document.querySelector('.list');
 
 function nameEl(m) {
   const li = document.createElement('li');
-  li.innerText = m.name || m.login;
+  const a = document.createElement('a');
+  a.href = `https://github.com/${m.login}`;
+  a.target = '_blank';
+  a.innerText = m.name || m.login;
+  li.appendChild(a);
   return li;
 }
 

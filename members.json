@@ -256,7 +256,11 @@
   {
     "login": "jbeardly",
     "name": "Jasper Beardly",
-    "location": null
+    "location": {
+      "name": "Springfield, OR, USA",
+      "lat": 44.0462362,
+      "long": -123.0220289
+    }
   },
   {
     "login": "marnovo",
