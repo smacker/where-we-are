@@ -203,6 +203,7 @@ class Earth {
 
     const mouseMove = e => this.move(rotateStart, [e.clientX, e.clientY]);
     const mouseUp = () => {
+      this.container.classList.remove('is-grabbing');
       document.removeEventListener('mousemove', mouseMove, false);
       document.removeEventListener('mouseup', mouseUp, false);
     };

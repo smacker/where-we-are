@@ -28,6 +28,10 @@ body {
   cursor: grab;
 }
 
+.globe.is-grabbing {
+  cursor: grabbing;
+}
+
 .list {
   flex-shrink: 0;
   width: 40%;
