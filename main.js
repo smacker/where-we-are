@@ -37,7 +37,7 @@ function membersList(members) {
   list.appendChild(locationEl(nullLocationName, grouped[nullLocationName]));
 }
 
-fetch('/members.json')
+fetch('./members.json')
   .then(r => r.json())
   .then(members => {
     earth.addMembers(members);
