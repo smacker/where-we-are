@@ -35,9 +35,26 @@ function membersList(members) {
     return acc;
   }, {});
 
+  Object.keys(grouped).forEach(k =>
+    grouped[k].sort((a, b) => {
+      if (a.name && b.name) {
+        return a.name.toLowerCase() > b.name.toLowerCase();
+      }
+      if (a.name && !b.name) {
+        return -1;
+      }
+      if (b.name && !a.name) {
+        return 1;
+      }
+      return a.login > b.login;
+    })
+  );
+
   let locations = Object.keys(grouped).filter(l => l != nullLocationName);
   locations.sort((a, b) => grouped[a].length < grouped[b].length);
-  locations.forEach(l => list.appendChild(locationEl(l, grouped[l])));
+  locations.forEach(l => {
+    list.appendChild(locationEl(l, grouped[l]));
+  });
   list.appendChild(locationEl(nullLocationName, grouped[nullLocationName]));
 }
 
