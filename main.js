@@ -1,4 +1,4 @@
-const earth = new Earth(document.querySelector('.globe'));
+const earth = new Earth(document.querySelector('.earth'));
 const nullLocationName = 'Outer space';
 const list = document.querySelector('.list');
 

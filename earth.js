@@ -1,5 +1,4 @@
 // FIXME: optimize rendering, it burns my laptop
-// TODO: make canvas smaller, to fit only earth without any padding
 // TODO: import from three.js + bundler
 // TODO: add loader while images are loading
 // TODO: images: optimize jpg and convert to webp
@@ -7,7 +6,7 @@
 // TODO: add mobile support
 // TODO: better animation when user stops rotating
 
-const EARTH_RADIUS = 0.5;
+const EARTH_RADIUS = 0.7;
 // where the camera is located
 const ORBIT_RADIUS = 2;
 // initial coordinates for the camera
@@ -21,6 +20,7 @@ class Earth {
     this.cameraLong = INITIAL_COORDS.longitude;
     this.loaded = 0;
     this.container = container;
+    this.canvas = this.container.querySelector('canvas');
 
     this.scene = null;
     this.camera = null;
@@ -33,6 +33,7 @@ class Earth {
     this.loader = new THREE.ImageLoader();
     this.spinning = true;
 
+    this.resizeCanvas();
     this.init();
   }
 
@@ -41,7 +42,7 @@ class Earth {
     const scene = (this.scene = new THREE.Scene());
     const camera = (this.camera = new THREE.PerspectiveCamera(
       45, // field of view
-      this.container.offsetWidth / this.container.offsetHeight, // aspect ratio
+      1, // aspect ratio
       // near and far clipping plane
       0.1,
       100
@@ -76,12 +77,12 @@ class Earth {
 
     // Create a renderer
     const renderer = (this.renderer = new THREE.WebGLRenderer({
+      canvas: this.canvas,
       antialias: true
     }));
     // on HiDPI devices prevents bluring output canvas
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(this.container.offsetWidth, this.container.offsetHeight);
-    this.container.appendChild(renderer.domElement);
+    renderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight);
 
     // main texture
     // the idea is to use different pictures depends on the current month
@@ -192,11 +193,11 @@ class Earth {
   attach() {
     let rotateStart;
 
-    this.container.addEventListener('mouseover', () => {
+    this.canvas.addEventListener('mouseover', () => {
       this.spinning = false;
     });
 
-    this.container.addEventListener('mouseout', () => {
+    this.canvas.addEventListener('mouseout', () => {
       this.spinning = true;
     });
 
@@ -207,7 +208,7 @@ class Earth {
       document.removeEventListener('mouseup', mouseUp, false);
     };
 
-    this.container.addEventListener('mousedown', e => {
+    this.canvas.addEventListener('mousedown', e => {
       // only left button
       if (e.button === 0) {
         rotateStart = [e.clientX, e.clientY];
@@ -219,19 +220,14 @@ class Earth {
     });
 
     window.addEventListener('resize', () => {
-      this.renderer.setSize(
-        this.container.offsetWidth,
-        this.container.offsetHeight
-      );
-      this.camera.aspect =
-        this.container.offsetWidth / this.container.offsetHeight;
-      this.camera.updateProjectionMatrix();
+      this.resizeCanvas();
+      this.renderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight);
     });
   }
 
   move(start, end) {
     const PI2 = 2 * Math.PI;
-    const canvasHeight = this.container.offsetHeight * 10;
+    const canvasHeight = this.canvas.offsetHeight * 10;
     const delta = new THREE.Spherical();
     delta.setFromVector3(this.camera.position);
 
@@ -241,6 +237,16 @@ class Earth {
     delta.makeSafe();
     this.camera.position.setFromSpherical(delta);
     this.camera.lookAt(0, 0, 0);
+  }
+
+  resizeCanvas() {
+    const containerW = this.container.clientWidth;
+    const containerH = this.container.clientHeight;
+    const canvasSize = containerW < containerH ? containerW : containerH;
+    this.canvas.style.width = canvasSize + 'px';
+    this.canvas.style.height = canvasSize + 'px';
+    this.canvas.style.marginTop = 0 - canvasSize / 2 + 'px';
+    this.canvas.style.marginLeft = 0 - canvasSize / 2 + 'px';
   }
 }
 
