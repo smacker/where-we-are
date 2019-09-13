@@ -52,7 +52,7 @@ class Earth {
 
     // Create the planet
     const sphere = new THREE.Mesh(
-      new THREE.SphereGeometry(EARTH_RADIUS, 32, 32),
+      new THREE.SphereBufferGeometry(EARTH_RADIUS, 32, 32),
       new THREE.MeshPhongMaterial()
     );
     scene.add(sphere);
@@ -119,9 +119,10 @@ class Earth {
     // make height bumps on the surface
     this.loader.load(`images/earthbump1k.${ext}`, mapImage => {
       sphere.material.bumpMap = new THREE.CanvasTexture(mapImage);
-      sphere.material.bumpScale = 0.05;
+      sphere.material.bumpScale = 0.02;
       this.load();
     });
+    //
     // makes water to reflect more light than land
     this.loader.load(`images/earthspec1k.${ext}`, mapImage => {
       sphere.material.specularMap = new THREE.CanvasTexture(mapImage);
@@ -141,20 +142,25 @@ class Earth {
   }
 
   animate() {
-    requestAnimationFrame(this.animate.bind(this));
-
-    if (this.spinning) {
-      // rotate camera around Earth instead of rotating the earth to keep Sun at the same point
-      setPosition(
-        this.camera.position,
-        ORBIT_RADIUS,
-        INITIAL_COORDS.latitude,
-        this.cameraLong
-      );
-      this.camera.lookAt(0, 0, 0);
-      this.cameraLong += 0.1;
+    if (!this.spinning) {
+      return;
     }
 
+    // rotate camera around Earth instead of rotating the earth to keep Sun at the same point
+    setPosition(
+      this.camera.position,
+      ORBIT_RADIUS,
+      INITIAL_COORDS.latitude,
+      this.cameraLong
+    );
+    this.camera.lookAt(0, 0, 0);
+    this.cameraLong += 0.1;
+    this.render();
+
+    requestAnimationFrame(this.animate.bind(this));
+  }
+
+  render() {
     this.dots.forEach(dot => {
       const distance = this.camera.position.distanceTo(dot.position);
       dot.material.depthTest = distance > this.distanceToEdge;
@@ -217,6 +223,7 @@ class Earth {
 
     this.canvas.addEventListener('mouseout', () => {
       this.spinning = true;
+      this.animate();
     });
 
     const mouseMove = e => this.move(rotateStart, [e.clientX, e.clientY]);
@@ -255,6 +262,8 @@ class Earth {
     delta.makeSafe();
     this.camera.position.setFromSpherical(delta);
     this.camera.lookAt(0, 0, 0);
+
+    this.render();
   }
 
   resizeCanvas() {
