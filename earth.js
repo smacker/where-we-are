@@ -1,7 +1,6 @@
 // FIXME: optimize rendering, it burns my laptop
 // TODO: import from three.js + bundler
 // TODO: add loader while images are loading
-// TODO: images: optimize jpg and convert to webp
 // TODO: add touch events
 // TODO: add mobile support
 // TODO: better animation when user stops rotating
@@ -34,7 +33,10 @@ class Earth {
     this.spinning = true;
 
     this.resizeCanvas();
-    this.init();
+    isWebpSupported(supported => {
+      this.isWebp = supported;
+      this.init();
+    });
   }
 
   init() {
@@ -87,25 +89,41 @@ class Earth {
     // main texture
     // the idea is to use different pictures depends on the current month
     // source of images: https://visibleearth.nasa.gov/view_cat.php?categoryID=1484
-    // FIXME: will need to resize images, they are huge
-    let mainTexture = 'world.200409.3x5400x2700.jpg';
-    // TODO: add more months
-    const currentMonth = new Date().getMonth();
-    if (currentMonth > 9 || currentMonth < 3) {
-      mainTexture = 'world.200412.3x5400x2700.jpg';
-    }
+    // all images are resized to 4096x2048px and optimized using:
+    //
+    // #!/bin/bash
+    // for i in $(seq -f "%02g" 1 12); do
+    //     convert "images/origin/world.2004$i.3x5400x2700.jpg" -resize 4096x2048 "images/world.2004$i.jpg"
+    //     convert "images/world.2004$i.jpg" "images/world.2004$i.webp"
+    // done
+    //
+    const currentMonth = new Date().getMonth() + 1;
+    const paddingZero = currentMonth < 10 ? '0' : '';
+    const ext = this.isWebp ? 'webp' : 'jpg';
+    const mainTexture = `world.2004${paddingZero}${currentMonth}.${ext}`;
     this.loader.load(`images/${mainTexture}`, mapImage => {
       sphere.material.map = new THREE.CanvasTexture(mapImage);
       this.load();
     });
+
+    // Bump and specular textures are taken from: http://planetpixelemporium.com/earth.html
+    // and optimized using:
+    //
+    // #!/bin/bash
+    // for i in earthbump1k earthspec1k
+    // do
+    //     convert "images/origin/$i.jpg" -resize 512x256  "images/$i.jpg"
+    //     convert "images/$i.jpg"  "images/$i.webp"
+    // done
+    //
     // make height bumps on the surface
-    this.loader.load('images/earthbump1k.jpg', mapImage => {
+    this.loader.load(`images/earthbump1k.${ext}`, mapImage => {
       sphere.material.bumpMap = new THREE.CanvasTexture(mapImage);
       sphere.material.bumpScale = 0.05;
       this.load();
     });
     // makes water to reflect more light than land
-    this.loader.load('images/earthspec1k.jpg', mapImage => {
+    this.loader.load(`images/earthspec1k.${ext}`, mapImage => {
       sphere.material.specularMap = new THREE.CanvasTexture(mapImage);
       sphere.material.specular = new THREE.Color('grey');
       this.load();
@@ -258,4 +276,15 @@ function setPosition(position, radius, latitude, longitude) {
   position.x = -radius * Math.sin(phi) * Math.cos(theta);
   position.z = radius * Math.sin(phi) * Math.sin(theta);
   position.y = radius * Math.cos(phi);
+}
+
+// Snippet adapdate from the official doc:
+// https://developers.google.com/speed/webp/faq#how_can_i_detect_browser_support_for_webp
+function isWebpSupported(callback) {
+  let img = new Image();
+  img.onload = () => callback(img.width > 0 && img.height > 0);
+  img.onerror = () => callback(false);
+  img.src =
+    'data:image/webp;base64,' +
+    'UklGRhoAAABXRUJQVlA4TA0AAAAvAAAAEAcQERGIiP4HAA==';
 }
