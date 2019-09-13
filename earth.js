@@ -20,6 +20,8 @@ import images from './images/*.*';
 // TODO: add touch events
 // TODO: add mobile support
 // TODO: better animation when user stops rotating
+// TODO: add popup with location name on pin hover
+// TODO: make pin bigger on member hover
 
 const EARTH_RADIUS = 0.7;
 // where the camera is located

@@ -13,7 +13,9 @@ yarn dev
 
 #### Update list of people
 
+```
 GITHUB_TOKEN= GMAP_KEY= node update_members.js
+```
 
 ### Credits
 
