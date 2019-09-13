@@ -7,7 +7,8 @@ Deployed version: http://smacker.ru/where-we-are/
 ### Development
 
 ```
-python3 -m http.server
+yarn
+yarn dev
 ```
 
 ### Credits

@@ -1,0 +1,19 @@
+{
+  "name": "where-we-are",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:smacker/where-we-are.git",
+  "author": "Maxim Sukharev <max@smacker.ru>",
+  "license": "MIT",
+  "dependencies": {
+    "three": "^0.108.0"
+  },
+  "scripts": {
+    "dev": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "devDependencies": {
+    "cssnano": "^4.1.10",
+    "parcel-bundler": "^1.12.3"
+  }
+}

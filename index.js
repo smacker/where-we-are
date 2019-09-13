@@ -1,3 +1,6 @@
+import Earth from './earth';
+import members from './members.json';
+
 const earth = new Earth(document.querySelector('.earth'));
 const nullLocationName = 'Outer space';
 const list = document.querySelector('.list');
@@ -58,9 +61,5 @@ function membersList(members) {
   list.appendChild(locationEl(nullLocationName, grouped[nullLocationName]));
 }
 
-fetch('./members.json')
-  .then(r => r.json())
-  .then(members => {
-    earth.addMembers(members);
-    membersList(members);
-  });
+earth.addMembers(members);
+membersList(members);

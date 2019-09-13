@@ -1,5 +1,21 @@
+import { AmbientLight } from 'three/src/lights/AmbientLight';
+import { CanvasTexture } from 'three/src/textures/CanvasTexture';
+import { Color } from 'three/src/math/Color';
+import { DirectionalLight } from 'three/src/lights/DirectionalLight';
+import { ImageLoader } from 'three/src/loaders/ImageLoader';
+import { Mesh } from 'three/src/objects/Mesh';
+import { MeshPhongMaterial } from 'three/src/materials/MeshPhongMaterial';
+import { PerspectiveCamera } from 'three/src/cameras/PerspectiveCamera';
+import { Scene } from 'three/src/scenes/Scene';
+import { SphereBufferGeometry } from 'three/src/geometries/SphereGeometry';
+import { Spherical } from 'three/src/math/Spherical';
+import { Sprite } from 'three/src/objects/Sprite';
+import { SpriteMaterial } from 'three/src/materials/SpriteMaterial';
+import { Vector3 } from 'three/src/math/Vector3';
+import { WebGLRenderer } from 'three/src/renderers/WebGLRenderer';
+import images from './images/*.*';
+
 // FIXME: optimize rendering, it burns my laptop
-// TODO: import from three.js + bundler
 // TODO: add loader while images are loading
 // TODO: add touch events
 // TODO: add mobile support
@@ -29,20 +45,17 @@ class Earth {
     this.distanceToEdge = null;
 
     this.dots = [];
-    this.loader = new THREE.ImageLoader();
+    this.loader = new ImageLoader();
     this.spinning = true;
 
     this.resizeCanvas();
-    isWebpSupported(supported => {
-      this.isWebp = supported;
-      this.init();
-    });
+    this.init();
   }
 
   init() {
     // Create a scene
-    const scene = (this.scene = new THREE.Scene());
-    const camera = (this.camera = new THREE.PerspectiveCamera(
+    const scene = (this.scene = new Scene());
+    const camera = (this.camera = new PerspectiveCamera(
       45, // field of view
       1, // aspect ratio
       // near and far clipping plane
@@ -51,15 +64,15 @@ class Earth {
     ));
 
     // Create the planet
-    const sphere = new THREE.Mesh(
-      new THREE.SphereBufferGeometry(EARTH_RADIUS, 32, 32),
-      new THREE.MeshPhongMaterial()
+    const sphere = new Mesh(
+      new SphereBufferGeometry(EARTH_RADIUS, 32, 32),
+      new MeshPhongMaterial()
     );
     scene.add(sphere);
 
     // Add the light
-    scene.add(new THREE.AmbientLight(0x909090));
-    const light = (this.light = new THREE.DirectionalLight(0x4f4f4f, 1));
+    scene.add(new AmbientLight(0x909090));
+    const light = (this.light = new DirectionalLight(0x4f4f4f, 1));
     scene.add(light);
 
     this.moveSun();
@@ -74,11 +87,11 @@ class Earth {
     camera.lookAt(0, 0, 0);
 
     this.distanceToEdge = camera.position.distanceTo(
-      new THREE.Vector3(0, EARTH_RADIUS, 0)
+      new Vector3(0, EARTH_RADIUS, 0)
     );
 
     // Create a renderer
-    const renderer = (this.renderer = new THREE.WebGLRenderer({
+    const renderer = (this.renderer = new WebGLRenderer({
       canvas: this.canvas,
       antialias: true
     }));
@@ -86,6 +99,13 @@ class Earth {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight);
 
+    isWebpSupported(supported => {
+      this.isWebp = supported;
+      this.loadTextures(sphere);
+    });
+  }
+
+  loadTextures(sphere) {
     // main texture
     // the idea is to use different pictures depends on the current month
     // source of images: https://visibleearth.nasa.gov/view_cat.php?categoryID=1484
@@ -100,9 +120,9 @@ class Earth {
     const currentMonth = new Date().getMonth() + 1;
     const paddingZero = currentMonth < 10 ? '0' : '';
     const ext = this.isWebp ? 'webp' : 'jpg';
-    const mainTexture = `world.2004${paddingZero}${currentMonth}.${ext}`;
-    this.loader.load(`images/${mainTexture}`, mapImage => {
-      sphere.material.map = new THREE.CanvasTexture(mapImage);
+    const mainTexture = `2004${paddingZero}${currentMonth}.${ext}`;
+    this.loader.load(images.world[`${mainTexture}`], mapImage => {
+      sphere.material.map = new CanvasTexture(mapImage);
       this.load();
     });
 
@@ -117,16 +137,16 @@ class Earth {
     // done
     //
     // make height bumps on the surface
-    this.loader.load(`images/earthbump1k.${ext}`, mapImage => {
-      sphere.material.bumpMap = new THREE.CanvasTexture(mapImage);
+    this.loader.load(images.earthbump1k[ext], mapImage => {
+      sphere.material.bumpMap = new CanvasTexture(mapImage);
       sphere.material.bumpScale = 0.02;
       this.load();
     });
     //
     // makes water to reflect more light than land
-    this.loader.load(`images/earthspec1k.${ext}`, mapImage => {
-      sphere.material.specularMap = new THREE.CanvasTexture(mapImage);
-      sphere.material.specular = new THREE.Color('grey');
+    this.loader.load(images.earthspec1k[ext], mapImage => {
+      sphere.material.specularMap = new CanvasTexture(mapImage);
+      sphere.material.specular = new Color('grey');
       this.load();
     });
   }
@@ -191,7 +211,7 @@ class Earth {
         return true;
       })
       .map(m => {
-        const dot = new THREE.Sprite(new THREE.SpriteMaterial());
+        const dot = new Sprite(new SpriteMaterial());
         dot.material.depthTest = false;
         dot.scale.set(0.05, 0.05, 1);
         dot.center.set(0.5, 0);
@@ -202,9 +222,9 @@ class Earth {
         return dot;
       });
 
-    this.loader.load('images/map-marker.png', image => {
+    this.loader.load(images['map-marker']['png'], image => {
       this.dots.forEach(dot => {
-        dot.material.map = new THREE.CanvasTexture(image);
+        dot.material.map = new CanvasTexture(image);
       });
 
       this.load();
@@ -253,7 +273,7 @@ class Earth {
   move(start, end) {
     const PI2 = 2 * Math.PI;
     const canvasHeight = this.canvas.offsetHeight * 10;
-    const delta = new THREE.Spherical();
+    const delta = new Spherical();
     delta.setFromVector3(this.camera.position);
 
     delta.theta -= (PI2 * (end[0] - start[0])) / canvasHeight;
@@ -297,3 +317,5 @@ function isWebpSupported(callback) {
     'data:image/webp;base64,' +
     'UklGRhoAAABXRUJQVlA4TA0AAAAvAAAAEAcQERGIiP4HAA==';
 }
+
+export default Earth;
