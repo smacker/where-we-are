@@ -55,6 +55,15 @@
     }
   },
   {
+    "login": "alexpdp7",
+    "name": null,
+    "location": {
+      "name": "Barcelona, Spain",
+      "lat": 41.3850639,
+      "long": 2.1734035
+    }
+  },
+  {
     "login": "ajnavarro",
     "name": "Antonio Navarro Perez",
     "location": {
@@ -88,6 +97,15 @@
       "name": "Madrid, Spain",
       "lat": 40.4167754,
       "long": -3.7037902
+    }
+  },
+  {
+    "login": "rpau",
+    "name": "Raquel Pau",
+    "location": {
+      "name": "Barcelona, Spain",
+      "lat": 41.3850639,
+      "long": 2.1734035
     }
   },
   {
@@ -233,15 +251,6 @@
       "name": "Tallinn, Estonia",
       "lat": 59.43696079999999,
       "long": 24.7535747
-    }
-  },
-  {
-    "login": "dmitryvinn",
-    "name": "Dmitry Vinnik",
-    "location": {
-      "name": "Vancouver, BC, Canada",
-      "lat": 49.2827291,
-      "long": -123.1207375
     }
   },
   {
