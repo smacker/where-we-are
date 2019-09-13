@@ -9,6 +9,7 @@
     "three": "^0.108.0"
   },
   "scripts": {
+    "test": "echo ok",
     "dev": "parcel index.html",
     "build": "parcel build index.html"
   },
