@@ -89,11 +89,11 @@ class Earth {
     // main texture
     // the idea is to use different pictures depends on the current month
     // source of images: https://visibleearth.nasa.gov/view_cat.php?categoryID=1484
-    // all images are resized to 4096x2048px and optimized using:
+    // all images are resized to 2048x1024px and optimized using:
     //
     // #!/bin/bash
     // for i in $(seq -f "%02g" 1 12); do
-    //     convert "images/origin/world.2004$i.3x5400x2700.jpg" -resize 4096x2048 "images/world.2004$i.jpg"
+    //     convert "images/origin/world.2004$i.3x5400x2700.jpg" -resize 2048x1024 "images/world.2004$i.jpg"
     //     convert "images/world.2004$i.jpg" "images/world.2004$i.webp"
     // done
     //
