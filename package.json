@@ -11,7 +11,7 @@
   "scripts": {
     "test": "echo ok",
     "dev": "parcel index.html",
-    "build": "parcel build index.html"
+    "build": "parcel build --public-url '.' index.html"
   },
   "devDependencies": {
     "cssnano": "^4.1.10",
