@@ -1,8 +1,5 @@
-import Earth from './earth';
-import members from './members.json';
-
-const earth = new Earth(document.querySelector('.earth'));
 const nullLocationName = 'Outer space';
+
 const list = document.querySelector('.list');
 
 function nameEl(m) {
@@ -61,5 +58,13 @@ function membersList(members) {
   list.appendChild(locationEl(nullLocationName, grouped[nullLocationName]));
 }
 
-earth.addMembers(members);
-membersList(members);
+const membersPromise = import('./members.json');
+
+Promise.all([membersPromise, import('./earth')]).then(([members, Earth]) => {
+  const earth = new Earth.default(document.querySelector('.earth'));
+  earth.addMembers(members);
+});
+
+membersPromise.then(members => {
+  membersList(members);
+});
