@@ -16,7 +16,6 @@ import { WebGLRenderer } from 'three/src/renderers/WebGLRenderer';
 import images from './images/*.*';
 
 // FIXME: optimize rendering, it burns my laptop
-// TODO: add loader while images are loading
 // TODO: add touch events
 // TODO: add mobile support
 // TODO: better animation when user stops rotating
@@ -197,6 +196,7 @@ class Earth {
       return;
     }
 
+    this.container.classList.add('loaded');
     this.attach();
     this.animate();
   }

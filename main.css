@@ -31,7 +31,44 @@ body {
   height: 100%;
 }
 
+.earth::after {
+  content: '';
+  display: block;
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width: 150px;
+  height: 150px;
+  margin-top: -75px;
+  margin-left: -75px;
+
+  border-left: 2px solid #8c7266;
+  border-radius: 50%;
+
+  animation-name: rotate;
+  animation-duration: 3s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.earth.loaded::after {
+  display: none;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .earth canvas {
+  display: none;
+
   position: absolute;
   left: 50%;
   top: 50%;
