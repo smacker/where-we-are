@@ -182,7 +182,7 @@ class Earth {
       this.cameraLong
     );
     this.camera.lookAt(0, 0, 0);
-    this.cameraLong += 0.1;
+    this.cameraLong -= 0.1;
 
     this.render();
 
