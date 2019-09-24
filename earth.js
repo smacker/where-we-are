@@ -15,12 +15,17 @@ import { Vector3 } from 'three/src/math/Vector3';
 import { WebGLRenderer } from 'three/src/renderers/WebGLRenderer';
 import images from './images/*.*';
 
-// FIXME: optimize rendering, it burns my laptop
+// Performance note:
+// it does consume some considerable amount of CPU/GPU
+// but profiling shows that rendering happens super quick
+// reducing number of fps helps a lot but makes the pic look much worse
+
 // TODO: add touch events
 // TODO: add mobile support
 // TODO: better animation when user stops rotating
 // TODO: add popup with location name on pin hover
 // TODO: make pin bigger on member hover
+// TODO: move webp checker and texture selector to separate script to be able to preload them
 
 const EARTH_RADIUS = 0.7;
 // where the camera is located
@@ -51,6 +56,8 @@ class Earth {
 
     this.resizeCanvas();
     this.init();
+
+    this.animate = this.animate.bind(this);
   }
 
   init() {
@@ -176,9 +183,10 @@ class Earth {
     );
     this.camera.lookAt(0, 0, 0);
     this.cameraLong += 0.1;
+
     this.render();
 
-    requestAnimationFrame(this.animate.bind(this));
+    requestAnimationFrame(this.animate);
   }
 
   render() {
