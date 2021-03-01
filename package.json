@@ -6,7 +6,7 @@
   "author": "Maxim Sukharev <max@smacker.ru>",
   "license": "MIT",
   "dependencies": {
-    "three": "^0.108.0"
+    "three": "^0.125.0"
   },
   "scripts": {
     "test": "echo ok",
